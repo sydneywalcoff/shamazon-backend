@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { eq } = require('sequelize/types/lib/operators');
 const { Tag, Product, ProductTag } = require('../../models');
 
 // The `/api/tags` endpoint
@@ -49,10 +50,37 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   // update a tag's name by its `id` value
+  Tag.update({
+    where: {
+      id: req.params.id
+    },
+    tag_name = req.body.tag_name
+  })
+  .then(dbTagData => {
+    if(!dbTagData) {
+      res.status(404).json({ message: 'No Tag with that id'});
+      return;
+    }
+    res.json(dbTagData);
+  })
+  .catch(err => res.status(400).json(err));
 });
 
 router.delete('/:id', (req, res) => {
   // delete on tag by its `id` value
+  Tag.destroy({
+    where: {
+      id: req.params.id
+    }
+  })
+  .then(dbTagData => {
+    if(!dbTagData) {
+      res.status(404).json({ message: 'No Tag with that id'});
+      return;
+    }
+    res.json(dbTagData);
+  })
+  .catch(err => res.status(400).json(err));
 });
 
 module.exports = router;
