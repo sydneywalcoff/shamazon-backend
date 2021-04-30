@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
     include: [
       {
         model: Product,
-        attributes: ['product_name']
+        attributes: ['product_name', 'price', 'stock']
       }
     ]
   })
@@ -31,12 +31,12 @@ router.get('/:id', (req, res) => {
     include: [
       {
         model: Product,
-        attributes: ['product_name']
+        attributes: ['product_name', 'price', 'stock']
       }
     ]
   })
   .then(dbCategoryData => {
-    if(!dbPostData) {
+    if(!dbCategoryData) {
       res.status(404).json({ message: 'No Category found with this id'});
       return;
     }
@@ -57,11 +57,12 @@ router.post('/', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-  Category.update({
-    where: {
-      id: req.params.id
-    },
+  Category.update(
+  {
     category_name: req.body.category_name
+  },
+  {
+    where: {id: req.params.id}
   })
   .then(dbCategoryData => {
     if(!dbCategoryData) {
