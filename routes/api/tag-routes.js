@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const { eq } = require('sequelize/types/lib/operators');
 const { Tag, Product, ProductTag } = require('../../models');
 
 // The `/api/tags` endpoint
@@ -54,7 +53,7 @@ router.put('/:id', (req, res) => {
     where: {
       id: req.params.id
     },
-    tag_name = req.body.tag_name
+    tag_name: req.body.tag_name
   })
   .then(dbTagData => {
     if(!dbTagData) {
