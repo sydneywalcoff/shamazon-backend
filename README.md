@@ -9,13 +9,15 @@
 * [Questions](#questions)
 
 ## Description
-Shamazon is a working back end for an e-commerce site. Shamazon uses Express.js, MySQL, and Sequelize.
+Shamazon is a working back end for an e-commerce site. 
 
 ## Installation
 `npm i` to install dependencies. 
 
+This project uses dotenv, express, mysql2, and sequelize.
+
 ## Usage
-This is intended to be connted to a front end
+This is intended to be connected to a front end.
 
 ## Contributing
 Made with love by Sydney Walcoff
