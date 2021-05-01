@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Tag, Product, ProductTag } = require('../../models');
+const { Tag, Product, ProductTag, Category } = require('../../models');
 
 // The `/api/tags` endpoint
 
@@ -11,7 +11,12 @@ router.get('/', (req, res) => {
     include: [
       {
         model: Product,
-        attributes: ['product_name']
+        attributes: ['id', 'product_name', 'price', 'stock', 'category_id'],
+        include: [
+        {
+          model: Category,
+          attributes: ['category_name']
+        }]
       }
     ]
   })
@@ -31,15 +36,18 @@ router.get('/:id', (req, res) => {
     include: [
       {
         model: Product,
-        attributes: ['product_name']
+        attributes: ['id', 'product_name', 'price', 'stock', 'category_id'],
+        include: [
+          {
+            model: Category,
+            attributes: ['category_name']
+          }
+        ]
       }
     ]
   })
-  .then(dbTagData => res.json(dbTagData))
-  .catch(err => {
-    console.log(err);
-    res.json(400).json(err);
-  });
+  .then( dbTagData => { res.json(dbTagData) })
+  .catch(err => res.status(400).json(err));
   // be sure to include its associated Product data
 });
 
