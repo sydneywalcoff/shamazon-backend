@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
     include: [
       {
         model: Product,
-        attributes: ['id']
+        attributes: ['product_name']
       }
     ]
   })
@@ -31,17 +31,22 @@ router.get('/:id', (req, res) => {
     include: [
       {
         model: Product,
-        attributes: ['id']
+        attributes: ['product_name']
       }
     ]
   })
+  .then(dbTagData => res.json(dbTagData))
+  .catch(err => {
+    console.log(err);
+    res.json(400).json(err);
+  });
   // be sure to include its associated Product data
 });
 
 router.post('/', (req, res) => {
   // create a new tag
   Tag.create({
-    tag_name: req.params.tag_name
+    tag_name: req.body.tag_name
   })
   .then(dbTagData => res.json(dbTagData))
   .catch(err => res.status(400).json(err));
@@ -49,11 +54,14 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   // update a tag's name by its `id` value
-  Tag.update({
+  Tag.update(
+  {
+    tag_name: req.body.tag_name
+  },
+  {
     where: {
       id: req.params.id
-    },
-    tag_name: req.body.tag_name
+    }
   })
   .then(dbTagData => {
     if(!dbTagData) {
@@ -67,7 +75,8 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   // delete on tag by its `id` value
-  Tag.destroy({
+  Tag.destroy(
+  {
     where: {
       id: req.params.id
     }
