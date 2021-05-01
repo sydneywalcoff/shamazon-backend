@@ -19,7 +19,17 @@ router.get('/', (req, res) => {
       }
     ]
   })
-  // be sure to include its associated Category and Tag data
+  .then(dbProductData => {
+    if(!dbProductData) {
+      res.status(404).json({ message: 'No Product found at that id'});
+      return;
+    }
+    res.json(dbProductData);
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(400).json(err);
+  });
 });
 
 // get one product
@@ -90,11 +100,17 @@ router.post('/', (req, res) => {
 // update product
 router.put('/:id', (req, res) => {
   // update product data
-  Product.update(req.body, {
-    where: {
+  Product.update(req.body, 
+    {where: {
       id: req.params.id,
-    },
-  })
+    }},
+    {
+      product_name: req.body.product_name,
+      price: req.body.price,
+      stock: req.body.stock,
+      tagIds: req.body.tagIds
+    }
+  )
     .then((product) => {
       // find all associated tags from ProductTag
       return ProductTag.findAll({ where: { product_id: req.params.id } });
